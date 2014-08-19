@@ -162,44 +162,34 @@
 #define L4_SLOT_PTE		255
 #define L4_SLOT_KERN		256
 #define L4_SLOT_KERNBASE	511
-#define L4_SLOT_APTE		510
 #define L4_SLOT_DIRECT		509
 
 #define PDIR_SLOT_KERN		L4_SLOT_KERN
 #define PDIR_SLOT_PTE		L4_SLOT_PTE
-#define PDIR_SLOT_APTE		L4_SLOT_APTE
 #define PDIR_SLOT_DIRECT	L4_SLOT_DIRECT
 
 /*
  * the following defines give the virtual addresses of various MMU
  * data structures:
- * PTE_BASE and APTE_BASE: the base VA of the linear PTE mappings
- * PTD_BASE and APTD_BASE: the base VA of the recursive mapping of the PTD
- * PDP_PDE and APDP_PDE: the VA of the PDE that points back to the PDP/APDP
+ * PTE_BASE: the base VA of the linear PTE mappings
+ * PTD_BASE: the base VA of the recursive mapping of the PTD
+ * PDP_PDE: the VA of the PDE that points back to the PDP
  *
  */
 
 #define PTE_BASE  ((pt_entry_t *) (L4_SLOT_PTE * NBPD_L4))
-#define APTE_BASE ((pt_entry_t *) (VA_SIGN_NEG((L4_SLOT_APTE * NBPD_L4))))
 #define PMAP_DIRECT_BASE	(VA_SIGN_NEG((L4_SLOT_DIRECT * NBPD_L4)))
 #define PMAP_DIRECT_END		(VA_SIGN_NEG(((L4_SLOT_DIRECT + 1) * NBPD_L4)))
 
 #define L1_BASE		PTE_BASE
-#define AL1_BASE	APTE_BASE
 
 #define L2_BASE ((pd_entry_t *)((char *)L1_BASE + L4_SLOT_PTE * NBPD_L3))
 #define L3_BASE ((pd_entry_t *)((char *)L2_BASE + L4_SLOT_PTE * NBPD_L2))
 #define L4_BASE ((pd_entry_t *)((char *)L3_BASE + L4_SLOT_PTE * NBPD_L1))
 
-#define AL2_BASE ((pd_entry_t *)((char *)AL1_BASE + L4_SLOT_PTE * NBPD_L3))
-#define AL3_BASE ((pd_entry_t *)((char *)AL2_BASE + L4_SLOT_PTE * NBPD_L2))
-#define AL4_BASE ((pd_entry_t *)((char *)AL3_BASE + L4_SLOT_PTE * NBPD_L1))
-
 #define PDP_PDE		(L4_BASE + PDIR_SLOT_PTE)
-#define APDP_PDE	(L4_BASE + PDIR_SLOT_APTE)
 
 #define PDP_BASE	L4_BASE
-#define APDP_BASE	AL4_BASE
 
 #define NKL4_MAX_ENTRIES	(unsigned long)1
 #define NKL3_MAX_ENTRIES	(unsigned long)(NKL4_MAX_ENTRIES * 512)
@@ -256,7 +246,6 @@
 				  NKL3_MAX_ENTRIES, NKL4_MAX_ENTRIES }
 #define NBPD_INITIALIZER	{ NBPD_L1, NBPD_L2, NBPD_L3, NBPD_L4 }
 #define PDES_INITIALIZER	{ L2_BASE, L3_BASE, L4_BASE }
-#define APDES_INITIALIZER	{ AL2_BASE, AL3_BASE, AL4_BASE }
 
 /*
  * PTP macros:
@@ -418,15 +407,6 @@ void		pmap_write_protect(struct pmap *, vaddr_t,
 				vaddr_t, vm_prot_t);
 
 vaddr_t reserve_dumppages(vaddr_t); /* XXX: not a pmap fn */
-
-void	pmap_tlb_shootpage(struct pmap *, vaddr_t);
-void	pmap_tlb_shootrange(struct pmap *, vaddr_t, vaddr_t);
-void	pmap_tlb_shoottlb(void);
-#ifdef MULTIPROCESSOR
-void	pmap_tlb_shootwait(void);
-#else
-#define	pmap_tlb_shootwait()
-#endif
 
 paddr_t	pmap_prealloc_lowmem_ptps(paddr_t);
 
