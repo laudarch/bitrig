@@ -145,6 +145,12 @@
 ./etc/signify/bitrig-01-base.pub
 ./etc/signify/bitrig-01-fw.pub
 ./etc/signify/bitrig-01-pkg.pub
+./etc/signify/bitrig-10-base.pub
+./etc/signify/bitrig-10-fw.pub
+./etc/signify/bitrig-10-pkg.pub
+./etc/signify/bitrig-11-base.pub
+./etc/signify/bitrig-11-fw.pub
+./etc/signify/bitrig-11-pkg.pub
 ./etc/skel
 ./etc/skel/.ssh
 ./etc/sliphome
@@ -2689,6 +2695,7 @@
 ./usr/libexec/ssh-keysign
 ./usr/libexec/ssh-pkcs11-helper
 ./usr/libexec/sudo_noexec.so
+./usr/libexec/tradcpp
 ./usr/libexec/vi.recover
 ./usr/lkm
 ./usr/local
@@ -3872,6 +3879,7 @@
 ./usr/share/man/man1/touch.1
 ./usr/share/man/man1/tput.1
 ./usr/share/man/man1/tr.1
+./usr/share/man/man1/tradcpp.1
 ./usr/share/man/man1/true.1
 ./usr/share/man/man1/tset.1
 ./usr/share/man/man1/tsort.1
@@ -10839,8 +10847,6 @@
 ./usr/share/snmp/mibs/OPENBSD-SENSORS-MIB.txt
 ./usr/share/snmp/mibs/OPENBSD-SNMPD-CONF.txt
 ./usr/share/sysmerge
-./usr/share/sysmerge/etcsum
-./usr/share/sysmerge/examplessum
 ./usr/share/tabset
 ./usr/share/tabset/std
 ./usr/share/tabset/stdcrt
